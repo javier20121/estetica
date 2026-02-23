@@ -1,5 +1,5 @@
 // URL del Web App de Apps Script (Implementacion -> URL).
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzWw64qF-sSImMRaVxwlurjjrH4b391dD7SWccFg8am-htdk8Vdewf2MKCX2PBK8QEZ/exec';
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyMvS0n6EcAXYkRpKHylW5yJ-z4KZSADYLA3AUhw5RzBnwVn5Ex0oZNe8eTBMLE5dYf/exec';
 
 function handleLogin(e) {
 	e.preventDefault();
