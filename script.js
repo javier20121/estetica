@@ -31,7 +31,8 @@ function handleLogin(e) {
 				msgDiv.classList.add('success');
 				// Aqui puedes redirigir: window.location.href = 'URL_DESTINO';
 			} else {
-				msgDiv.textContent = response.message || 'Acceso denegado.';
+				const detail = response.detail ? ` (${response.detail})` : '';
+				msgDiv.textContent = (response.message || 'Acceso denegado.') + detail;
 				msgDiv.classList.add('error');
 			}
 		})
