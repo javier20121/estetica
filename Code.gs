@@ -270,9 +270,15 @@ function obtenerPerfil_(usuario) {
     return { success: false, message: 'Cliente no encontrado.' };
   }
 
+  // Log para debugging
+  Logger.log('Cliente encontrado: ' + cliente.usuario + ', Membresia ID: [' + cliente.membresiaId + '] (length: ' + cliente.membresiaId.length + ')');
+
   const membresia = buscarMembresia_(cliente.membresiaId);
   if (!membresia) {
-    return { success: false, message: 'Membresia no encontrada.' };
+    return { 
+      success: false, 
+      message: 'Membresia no encontrada. Buscando: [' + cliente.membresiaId + ']' 
+    };
   }
 
   const horasRestantes = Math.max(0, membresia.horasTotal - cliente.horasUsadas);
@@ -509,12 +515,12 @@ function buscarCliente_(usuario) {
     if (String(row[0] || '').trim() === usuario) {
       return {
         rowIndex: i + 1,
-        usuario: String(row[0] || ''),
-        nombre: String(row[1] || ''),
-        telefono: String(row[2] || ''),
-        membresiaId: String(row[3] || ''),
+        usuario: String(row[0] || '').trim(),
+        nombre: String(row[1] || '').trim(),
+        telefono: String(row[2] || '').trim(),
+        membresiaId: String(row[3] || '').trim(),
         horasUsadas: Number(row[4] || 0),
-        activo: String(row[5] || 'SI')
+        activo: String(row[5] || 'SI').trim()
       };
     }
   }
@@ -524,23 +530,33 @@ function buscarCliente_(usuario) {
 function buscarMembresia_(membresiaId) {
   const sheet = getSpreadsheet_().getSheetByName(SHEET_MEMBRESIAS);
   if (!sheet) {
+    Logger.log('No se encuentra la hoja Membresias');
     return null;
   }
   const data = sheet.getDataRange().getValues();
+  const membresiaIdTrimmed = String(membresiaId || '').trim();
+  
+  Logger.log('Buscando membresia: [' + membresiaIdTrimmed + ']');
+  
   for (let i = 1; i < data.length; i++) {
     const row = data[i];
-    if (String(row[0] || '').trim() === membresiaId) {
+    const rowId = String(row[0] || '').trim();
+    Logger.log('Comparando con fila ' + (i+1) + ': [' + rowId + ']');
+    
+    if (rowId === membresiaIdTrimmed) {
       const activo = String(row[3] || 'SI').trim().toUpperCase();
+      Logger.log('Membresia encontrada, activo: ' + activo);
       if (activo !== 'SI') {
         return null;
       }
       return {
-        id: String(row[0] || ''),
-        nombre: String(row[1] || ''),
+        id: rowId,
+        nombre: String(row[1] || '').trim(),
         horasTotal: Number(row[2] || 0)
       };
     }
   }
+  Logger.log('Membresia no encontrada en ninguna fila');
   return null;
 }
 
