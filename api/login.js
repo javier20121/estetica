@@ -1,4 +1,4 @@
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyg7g1k5jSqKdplsCp1g7C_L3Bz_bTRmht4ozFE67a0RapKksz-iYLaWrJVHhJB0WJR/exec';
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzIas_E1TLMF2-rorXdRIW4YnYdHnGA09Uwd2K3FAOo7Odjpk_ZDZBkeGgIww9wKwLC/exec';
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).json({ success: false, message: 'Metodo no permitido.' });
