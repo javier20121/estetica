@@ -16,10 +16,14 @@ function doGet() {
  * Espera POST con usuario y password (x-www-form-urlencoded).
  */
 function doPost(e) {
-  const user = e && e.parameter ? e.parameter.usuario : '';
-  const pass = e && e.parameter ? e.parameter.password : '';
-  const result = verificarLogin(user, pass);
-  return jsonResponse_(result);
+  try {
+    const user = e && e.parameter ? e.parameter.usuario : '';
+    const pass = e && e.parameter ? e.parameter.password : '';
+    const result = verificarLogin(user, pass);
+    return jsonResponse_(result);
+  } catch (err) {
+    return jsonResponse_({ success: false, message: 'Error en el servidor.' });
+  }
 }
 
 /**
@@ -75,7 +79,7 @@ function verificarLogin(usuario, password) {
       const dbUser = String(row[0]).trim(); // Columna A
       const dbPass = row[1];               // Columna B
       const dbRole = row[2];               // Columna C
-      const dbActive = row[3];             // Columna D
+      const dbActive = String(row[3]).trim().toUpperCase(); // Columna D
 
       // Comparación estricta
       if (dbUser === userInput && dbPass === passwordHash) {
@@ -123,7 +127,7 @@ function hashString(str) {
  * Utilidad: genera el hash SHA-256 para una clave en texto plano.
  * Ejecuta desde el editor de Apps Script para cargar usuarios.
  */
-funokection generarHashClave(plain) {
+function generarHashClave(plain) {
   if (plain === null || plain === undefined || String(plain).trim() === '') {
     throw new Error('La clave no puede ser vacia. Usa generarHashClavePrompt o pasa un valor.');
   }
