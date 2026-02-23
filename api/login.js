@@ -1,4 +1,9 @@
+import { sign } from './_lib/jwt.js';
+
 const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzIas_E1TLMF2-rorXdRIW4YnYdHnGA09Uwd2K3FAOo7Odjpk_ZDZBkeGgIww9wKwLC/exec';
+const JWT_SECRET = process.env.JWT_SECRET || '';
+const JWT_TTL_SECONDS = 60 * 60 * 2;
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).json({ success: false, message: 'Metodo no permitido.' });
@@ -38,6 +43,24 @@ export default async function handler(req, res) {
         message: 'Respuesta invalida del servidor. Revisa el deploy de Apps Script.',
         detail: `status=${response.status} snippet=${snippet}`
       };
+    }
+
+    if (payload && payload.success) {
+      if (!JWT_SECRET) {
+        res.status(500).json({ success: false, message: 'JWT secret no configurado.' });
+        return;
+      }
+
+      const token = sign(
+        { sub: String(usuario), role: payload.role || '' },
+        JWT_SECRET,
+        JWT_TTL_SECONDS
+      );
+
+      res.setHeader(
+        'Set-Cookie',
+        `session=${token}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${JWT_TTL_SECONDS}`
+      );
     }
 
     res.status(200).json(payload);

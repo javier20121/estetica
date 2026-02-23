@@ -327,18 +327,25 @@
     <script>
       // Verificar si el usuario está logueado
       window.onload = function() {
-        const usuario = localStorage.getItem('usuario');
-        if (!usuario) {
-          window.location.href = 'index.html';
-          return;
-        }
-        document.getElementById('userName').textContent = usuario;
+        fetch('/api/session')
+          .then((res) => res.json())
+          .then((data) => {
+            if (!data.success || !data.usuario) {
+              window.location.href = 'index.html';
+              return;
+            }
+            document.getElementById('userName').textContent = data.usuario;
+          })
+          .catch(() => {
+            window.location.href = 'index.html';
+          });
       };
       
       function logout() {
-        localStorage.removeItem('usuario');
-        localStorage.removeItem('rol');
-        window.location.href = 'index.html';
+        fetch('/api/logout', { method: 'POST' })
+          .finally(() => {
+            window.location.href = 'index.html';
+          });
       }
       
       function previousMonth() {
