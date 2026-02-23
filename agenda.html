@@ -72,6 +72,105 @@
         align-items: center;
         margin-bottom: 20px;
       }
+
+      .main-content {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+        align-items: start;
+      }
+
+      .card {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+
+      .card h3 {
+        font-size: 16px;
+        margin-bottom: 12px;
+        color: #333;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 12px;
+      }
+
+      .form-group label {
+        font-size: 12px;
+        color: #666;
+      }
+
+      .form-group select,
+      .form-group input {
+        padding: 8px 10px;
+        border: 1px solid #d0d0d0;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+
+      .btn-primary {
+        width: 100%;
+        padding: 10px 14px;
+        background-color: #4285f4;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .btn-primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .status-message {
+        font-size: 13px;
+        margin-top: 8px;
+      }
+
+      .status-message.error {
+        color: #d32f2f;
+      }
+
+      .status-message.success {
+        color: #2e7d32;
+      }
+
+      .membership-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        margin-bottom: 6px;
+      }
+
+      .turnos-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .turno-item {
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        padding: 8px 10px;
+        font-size: 12px;
+        color: #444;
+        background: #fafafa;
+      }
+
+      @media (max-width: 900px) {
+        .main-content {
+          grid-template-columns: 1fr;
+        }
+      }
       
       .calendar-nav {
         display: flex;
@@ -200,126 +299,170 @@
         <button class="btn-new-appointment">+ Nuevo Turno</button>
       </div>
       
-      <div class="calendar">
-        <div class="day-header">Lun</div>
-        <div class="day-header">Mar</div>
-        <div class="day-header">Mié</div>
-        <div class="day-header">Jue</div>
-        <div class="day-header">Vie</div>
-        <div class="day-header">Sáb</div>
-        <div class="day-header">Dom</div>
-        
-        <div class="day-cell other-month">
-          <div class="day-number">27</div>
-        </div>
-        <div class="day-cell other-month">
-          <div class="day-number">28</div>
-        </div>
-        <div class="day-cell other-month">
-          <div class="day-number">29</div>
-        </div>
-        <div class="day-cell other-month">
-          <div class="day-number">30</div>
-        </div>
-        <div class="day-cell other-month">
-          <div class="day-number">31</div>
-        </div>
-        <div class="day-cell">
-          <div class="day-number">1</div>
-        </div>
-        <div class="day-cell">
-          <div class="day-number">2</div>
-        </div>
-        
-        <div class="day-cell">
-          <div class="day-number">3</div>
-        </div>
-        <div class="day-cell">
-          <div class="day-number">4</div>
-        </div>
-        <div class="day-cell">
-          <div class="day-number">5</div>
-        </div>
-        <div class="day-cell">
-          <div class="day-number">6</div>
-        </div>
-        <div class="day-cell">
-          <div class="day-number">7</div>
-        </div>
-        <div class="day-cell">
-          <div class="day-number">8</div>
-        </div>
-        <div class="day-cell">
-          <div class="day-number">9</div>
-        </div>
-        
-        <div class="day-cell">
-          <div class="day-number">10</div>
-        </div>
-        <div class="day-cell">
-          <div class="day-number">11</div>
-        </div>
-        <div class="day-cell">
-          <div class="day-number">12</div>
-        </div>
-        <div class="day-cell">
-          <div class="day-number">13</div>
-        </div>
-        <div class="day-cell">
-          <div class="day-number">14</div>
-        </div>
-        <div class="day-cell">
-          <div class="day-number">15</div>
-        </div>
-        <div class="day-cell">
-          <div class="day-number">16</div>
-        </div>
-        
-        <div class="day-cell">
-          <div class="day-number">17</div>
-        </div>
-        <div class="day-cell">
-          <div class="day-number">18</div>
-        </div>
-        <div class="day-cell">
-          <div class="day-number">19</div>
-        </div>
-        <div class="day-cell">
-          <div class="day-number">20</div>
-        </div>
-        <div class="day-cell">
-          <div class="day-number">21</div>
-        </div>
-        <div class="day-cell">
-          <div class="day-number">22</div>
-        </div>
-        <div class="day-cell today">
-          <div class="day-number">23</div>
-          <div class="appointments">
-            <div class="appointment-item">10:00 - Ejemplo</div>
+      <div class="main-content">
+        <div class="calendar-section">
+          <div class="calendar">
+            <div class="day-header">Lun</div>
+            <div class="day-header">Mar</div>
+            <div class="day-header">Mié</div>
+            <div class="day-header">Jue</div>
+            <div class="day-header">Vie</div>
+            <div class="day-header">Sáb</div>
+            <div class="day-header">Dom</div>
+            
+            <div class="day-cell other-month">
+              <div class="day-number">27</div>
+            </div>
+            <div class="day-cell other-month">
+              <div class="day-number">28</div>
+            </div>
+            <div class="day-cell other-month">
+              <div class="day-number">29</div>
+            </div>
+            <div class="day-cell other-month">
+              <div class="day-number">30</div>
+            </div>
+            <div class="day-cell other-month">
+              <div class="day-number">31</div>
+            </div>
+            <div class="day-cell">
+              <div class="day-number">1</div>
+            </div>
+            <div class="day-cell">
+              <div class="day-number">2</div>
+            </div>
+            
+            <div class="day-cell">
+              <div class="day-number">3</div>
+            </div>
+            <div class="day-cell">
+              <div class="day-number">4</div>
+            </div>
+            <div class="day-cell">
+              <div class="day-number">5</div>
+            </div>
+            <div class="day-cell">
+              <div class="day-number">6</div>
+            </div>
+            <div class="day-cell">
+              <div class="day-number">7</div>
+            </div>
+            <div class="day-cell">
+              <div class="day-number">8</div>
+            </div>
+            <div class="day-cell">
+              <div class="day-number">9</div>
+            </div>
+            
+            <div class="day-cell">
+              <div class="day-number">10</div>
+            </div>
+            <div class="day-cell">
+              <div class="day-number">11</div>
+            </div>
+            <div class="day-cell">
+              <div class="day-number">12</div>
+            </div>
+            <div class="day-cell">
+              <div class="day-number">13</div>
+            </div>
+            <div class="day-cell">
+              <div class="day-number">14</div>
+            </div>
+            <div class="day-cell">
+              <div class="day-number">15</div>
+            </div>
+            <div class="day-cell">
+              <div class="day-number">16</div>
+            </div>
+            
+            <div class="day-cell">
+              <div class="day-number">17</div>
+            </div>
+            <div class="day-cell">
+              <div class="day-number">18</div>
+            </div>
+            <div class="day-cell">
+              <div class="day-number">19</div>
+            </div>
+            <div class="day-cell">
+              <div class="day-number">20</div>
+            </div>
+            <div class="day-cell">
+              <div class="day-number">21</div>
+            </div>
+            <div class="day-cell">
+              <div class="day-number">22</div>
+            </div>
+            <div class="day-cell today">
+              <div class="day-number">23</div>
+              <div class="appointments">
+                <div class="appointment-item">10:00 - Ejemplo</div>
+              </div>
+            </div>
+            
+            <div class="day-cell">
+              <div class="day-number">24</div>
+            </div>
+            <div class="day-cell">
+              <div class="day-number">25</div>
+            </div>
+            <div class="day-cell">
+              <div class="day-number">26</div>
+            </div>
+            <div class="day-cell">
+              <div class="day-number">27</div>
+            </div>
+            <div class="day-cell">
+              <div class="day-number">28</div>
+            </div>
+            <div class="day-cell other-month">
+              <div class="day-number">1</div>
+            </div>
+            <div class="day-cell other-month">
+              <div class="day-number">2</div>
+            </div>
           </div>
         </div>
-        
-        <div class="day-cell">
-          <div class="day-number">24</div>
-        </div>
-        <div class="day-cell">
-          <div class="day-number">25</div>
-        </div>
-        <div class="day-cell">
-          <div class="day-number">26</div>
-        </div>
-        <div class="day-cell">
-          <div class="day-number">27</div>
-        </div>
-        <div class="day-cell">
-          <div class="day-number">28</div>
-        </div>
-        <div class="day-cell other-month">
-          <div class="day-number">1</div>
-        </div>
-        <div class="day-cell other-month">
-          <div class="day-number">2</div>
+        <div class="side-panel">
+          <div class="card">
+            <h3>Mi membresia</h3>
+            <div class="membership-row">
+              <span>Plan</span>
+              <strong id="membershipName">-</strong>
+            </div>
+            <div class="membership-row">
+              <span>Horas restantes</span>
+              <strong id="hoursRemaining">-</strong>
+            </div>
+            <div class="membership-row">
+              <span>Horas usadas</span>
+              <strong id="hoursUsed">-</strong>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Reservar turno</h3>
+            <form id="bookingForm">
+              <div class="form-group">
+                <label for="servicioSelect">Servicio</label>
+                <select id="servicioSelect" required></select>
+              </div>
+              <div class="form-group">
+                <label for="fechaTurno">Fecha</label>
+                <input type="date" id="fechaTurno" required>
+              </div>
+              <div class="form-group">
+                <label for="horaSelect">Hora disponible</label>
+                <select id="horaSelect" required></select>
+              </div>
+              <button class="btn-primary" id="btnReservar" type="submit">Confirmar turno</button>
+              <div id="bookingMessage" class="status-message"></div>
+            </form>
+          </div>
+          <div class="card">
+            <h3>Mis turnos</h3>
+            <div id="turnosList" class="turnos-list"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -335,17 +478,176 @@
               return;
             }
             document.getElementById('userName').textContent = data.usuario;
+            initBooking();
           })
           .catch(() => {
             window.location.href = 'index.html';
           });
       };
+
+      function initBooking() {
+        loadServicios();
+        loadPerfil();
+        loadTurnos();
+
+        const fechaInput = document.getElementById('fechaTurno');
+        fechaInput.addEventListener('change', () => {
+          loadDisponibilidad(fechaInput.value);
+        });
+
+        const form = document.getElementById('bookingForm');
+        form.addEventListener('submit', reservarTurno);
+      }
       
       function logout() {
         fetch('/api/logout', { method: 'POST' })
           .finally(() => {
             window.location.href = 'index.html';
           });
+      }
+
+      function loadServicios() {
+        const select = document.getElementById('servicioSelect');
+        select.innerHTML = '';
+        fetch('/api/servicios')
+          .then((res) => res.json())
+          .then((data) => {
+            if (!data.success) {
+              setBookingMessage(data.message || 'No se pudieron cargar los servicios.', true);
+              return;
+            }
+            data.servicios.forEach((item) => {
+              const option = document.createElement('option');
+              option.value = item.id;
+              option.textContent = `${item.nombre} (${item.duracionHoras}h)`;
+              select.appendChild(option);
+            });
+          })
+          .catch(() => {
+            setBookingMessage('Error al cargar servicios.', true);
+          });
+      }
+
+      function loadPerfil() {
+        fetch('/api/perfil')
+          .then((res) => res.json())
+          .then((data) => {
+            if (!data.success) {
+              setBookingMessage(data.message || 'No se pudo cargar la membresia.', true);
+              return;
+            }
+            document.getElementById('membershipName').textContent = data.membresia || '-';
+            document.getElementById('hoursRemaining').textContent = data.horasRestantes;
+            document.getElementById('hoursUsed').textContent = data.horasUsadas;
+          })
+          .catch(() => {
+            setBookingMessage('Error al cargar perfil.', true);
+          });
+      }
+
+      function loadDisponibilidad(fecha) {
+        const select = document.getElementById('horaSelect');
+        select.innerHTML = '';
+        if (!fecha) {
+          return;
+        }
+        fetch(`/api/disponibilidad?fecha=${encodeURIComponent(fecha)}`)
+          .then((res) => res.json())
+          .then((data) => {
+            if (!data.success) {
+              setBookingMessage(data.message || 'No se pudo cargar disponibilidad.', true);
+              return;
+            }
+            if (!data.slots || data.slots.length === 0) {
+              setBookingMessage(data.message || 'No hay horarios disponibles.', true);
+              return;
+            }
+            data.slots.forEach((slot) => {
+              const option = document.createElement('option');
+              option.value = slot;
+              option.textContent = slot;
+              select.appendChild(option);
+            });
+            setBookingMessage('', false);
+          })
+          .catch(() => {
+            setBookingMessage('Error al cargar disponibilidad.', true);
+          });
+      }
+
+      function loadTurnos() {
+        const list = document.getElementById('turnosList');
+        list.innerHTML = '';
+        fetch('/api/turnos')
+          .then((res) => res.json())
+          .then((data) => {
+            if (!data.success) {
+              list.textContent = data.message || 'No se pudo cargar turnos.';
+              return;
+            }
+            if (!data.turnos || data.turnos.length === 0) {
+              list.textContent = 'Sin turnos registrados.';
+              return;
+            }
+            data.turnos.forEach((turno) => {
+              const item = document.createElement('div');
+              item.className = 'turno-item';
+              item.textContent = `${turno.fecha} ${turno.hora} - ${turno.servicio} (${turno.estado})`;
+              list.appendChild(item);
+            });
+          })
+          .catch(() => {
+            list.textContent = 'Error al cargar turnos.';
+          });
+      }
+
+      function reservarTurno(event) {
+        event.preventDefault();
+        const btn = document.getElementById('btnReservar');
+        const servicioId = document.getElementById('servicioSelect').value;
+        const fecha = document.getElementById('fechaTurno').value;
+        const hora = document.getElementById('horaSelect').value;
+
+        if (!servicioId || !fecha || !hora) {
+          setBookingMessage('Completa servicio, fecha y hora.', true);
+          return;
+        }
+
+        btn.disabled = true;
+        fetch('/api/turnos', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ servicioId, fecha, hora })
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (!data.success) {
+              setBookingMessage(data.message || 'No se pudo reservar.', true);
+              return;
+            }
+            setBookingMessage('Turno reservado con exito.', false, true);
+            loadPerfil();
+            loadTurnos();
+            loadDisponibilidad(fecha);
+          })
+          .catch(() => {
+            setBookingMessage('Error al reservar turno.', true);
+          })
+          .finally(() => {
+            btn.disabled = false;
+          });
+      }
+
+      function setBookingMessage(message, isError, isSuccess) {
+        const msg = document.getElementById('bookingMessage');
+        msg.textContent = message;
+        msg.className = 'status-message';
+        if (isError) {
+          msg.classList.add('error');
+        }
+        if (isSuccess) {
+          msg.classList.add('success');
+        }
       }
       
       function previousMonth() {
