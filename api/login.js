@@ -32,7 +32,12 @@ export default async function handler(req, res) {
     try {
       payload = JSON.parse(text);
     } catch (err) {
-      payload = { success: false, message: 'Respuesta invalida del servidor.' };
+      const snippet = text ? text.slice(0, 200) : '';
+      payload = {
+        success: false,
+        message: 'Respuesta invalida del servidor. Revisa el deploy de Apps Script.',
+        detail: `status=${response.status} snippet=${snippet}`
+      };
     }
 
     res.status(200).json(payload);
