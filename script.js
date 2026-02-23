@@ -27,9 +27,13 @@ function handleLogin(e) {
 			btn.disabled = false;
 
 			if (response.success) {
-				msgDiv.textContent = 'Acceso concedido.';
-				msgDiv.classList.add('success');
-				// Aqui puedes redirigir: window.location.href = 'URL_DESTINO';
+			msgDiv.textContent = 'Acceso concedido. Redirigiendo...';
+			msgDiv.classList.add('success');			// Guardar datos del usuario
+			localStorage.setItem('usuario', user);
+			localStorage.setItem('rol', response.role || '');			// Redirigir a la agenda
+			setTimeout(() => {
+				window.location.href = 'agenda.html';
+			}, 800);
 			} else {
 				const detail = response.detail ? ` (${response.detail})` : '';
 				msgDiv.textContent = (response.message || 'Acceso denegado.') + detail;
