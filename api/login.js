@@ -1,6 +1,6 @@
 import { sign } from './_lib/jwt.js';
 
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzIas_E1TLMF2-rorXdRIW4YnYdHnGA09Uwd2K3FAOo7Odjpk_ZDZBkeGgIww9wKwLC/exec';
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycby8m0HK7rceEgN3Kqh2OuznVrywu9B5Wf8merd5Msmr9vMOPHXmGGycvYRGNTK87egZ/exec';
 const JWT_SECRET = process.env.JWT_SECRET || '';
 const JWT_TTL_SECONDS = 60 * 60 * 2;
 
