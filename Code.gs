@@ -25,8 +25,26 @@ function doGet(e) {
  */
 function doPost(e) {
   try {
-    const user = e && e.parameter ? e.parameter.usuario : '';
-    const pass = e && e.parameter ? e.parameter.password : '';
+    let user = e && e.parameter ? e.parameter.usuario : '';
+    let pass = e && e.parameter ? e.parameter.password : '';
+
+    // Si llega JSON, leer desde postData
+    if ((!user || !pass) && e && e.postData && e.postData.contents) {
+      const contentType = String(e.postData.type || '').toLowerCase();
+      if (contentType.indexOf('application/json') !== -1) {
+        try {
+          const payload = JSON.parse(e.postData.contents);
+          user = payload.usuario || user;
+          pass = payload.password || pass;
+        } catch (err) {
+          // ignore JSON parse errors
+        }
+      }
+    }
+
+    if (!user || !pass) {
+      return jsonResponse_({ success: false, message: 'Faltan credenciales.' });
+    }
     const result = verificarLogin(user, pass);
     return jsonResponse_(result);
   } catch (err) {
@@ -67,6 +85,9 @@ function getSpreadsheet_() {
  */
 function verificarLogin(usuario, password) {
   try {
+    if (!usuario || !password) {
+      return { success: false, message: 'Faltan credenciales.' };
+    }
     const ss = getSpreadsheet_();
     const sheet = ss.getSheetByName("Usuarios");
     
@@ -116,6 +137,9 @@ function verificarLogin(usuario, password) {
  * Convierte el array de bytes de Google a string Hexadecimal.
  */
 function hashString(str) {
+  if (str === null || str === undefined) {
+    return '';
+  }
   const rawHash = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, str);
   let txtHash = '';
   for (let i = 0; i < rawHash.length; i++) {
