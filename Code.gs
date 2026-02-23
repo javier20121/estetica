@@ -5,10 +5,18 @@ const SPREADSHEET_ID = '1fRSUwFLQ97PileszFIyZCdXkif6yk29R8u3qcgEG-Jw';
 /**
  * Sirve el archivo HTML cuando se accede a la Web App.
  */
-function doGet() {
+function doGet(e) {
+  const user = e && e.parameter ? e.parameter.usuario : '';
+  const pass = e && e.parameter ? e.parameter.password : '';
+
+  if (user && pass) {
+    const result = verificarLogin(user, pass);
+    return jsonResponse_(result);
+  }
+
   return HtmlService.createHtmlOutputFromFile('Index')
-      .setTitle('Login Sistema')
-      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+    .setTitle('Login Sistema')
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
 
 /**
