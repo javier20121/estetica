@@ -38,9 +38,13 @@ export default async function handler(req, res) {
       payload = JSON.parse(text);
     } catch (err) {
       const snippet = text ? text.slice(0, 200) : '';
+      const isHtml = /<!doctype html>|<html/i.test(text || '');
+      const isAuthStatus = response.status === 401 || response.status === 403;
       payload = {
         success: false,
-        message: 'Respuesta invalida del servidor. Revisa el deploy de Apps Script.',
+        message: (isHtml && isAuthStatus)
+          ? 'El Web App de Apps Script no es accesible publicamente (401/403). En Deploy debe quedar en "Anyone".'
+          : 'Respuesta invalida del servidor. Revisa el deploy de Apps Script.',
         detail: `status=${response.status} snippet=${snippet}`
       };
     }
