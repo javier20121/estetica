@@ -270,14 +270,11 @@ function obtenerPerfil_(usuario) {
     return { success: false, message: 'Cliente no encontrado.' };
   }
 
-  // Log para debugging
-  Logger.log('Cliente encontrado: ' + cliente.usuario + ', Membresia ID: [' + cliente.membresiaId + '] (length: ' + cliente.membresiaId.length + ')');
-
-  const membresia = buscarMembresia_(cliente.membresiaId);
+  const membresia = construirMembresiaDesdeCliente_(cliente);
   if (!membresia) {
     return { 
       success: false, 
-      message: 'Membresia no encontrada. Buscando: [' + cliente.membresiaId + ']' 
+      message: 'Membresia no valida en hoja Clientes. Completa membresiaId y horas totales.' 
     };
   }
 
@@ -513,6 +510,20 @@ function buscarCliente_(usuario) {
   for (let i = 1; i < data.length; i++) {
     const row = data[i];
     if (String(row[0] || '').trim() === usuario) {
+      const estadoRaw = String(row[5] || '').trim();
+      const horasTotalesColF = Number(row[5] || 0);
+      const horasTotalesColG = Number(row[6] || 0);
+
+      let activo = 'SI';
+      let horasTotales = 0;
+
+      if (esEstadoCliente_(estadoRaw)) {
+        activo = estadoRaw;
+        horasTotales = horasTotalesColG;
+      } else {
+        horasTotales = horasTotalesColF;
+      }
+
       return {
         rowIndex: i + 1,
         usuario: String(row[0] || '').trim(),
@@ -520,53 +531,49 @@ function buscarCliente_(usuario) {
         telefono: String(row[2] || '').trim(),
         membresiaId: String(row[3] || '').trim(),
         horasUsadas: Number(row[4] || 0),
-        activo: String(row[5] || 'SI').trim()
+        activo: activo,
+        horasTotales: horasTotales
       };
     }
   }
   return null;
 }
 
-function buscarMembresia_(membresiaId) {
-  const sheet = getSpreadsheet_().getSheetByName(SHEET_MEMBRESIAS);
-  if (!sheet) {
-    Logger.log('No se encuentra la hoja Membresias');
+function construirMembresiaDesdeCliente_(cliente) {
+  const membresiaId = String(cliente.membresiaId || '').trim();
+  if (!membresiaId) {
     return null;
   }
 
-  const queryRaw = String(membresiaId || '').trim();
-  if (!queryRaw) {
-    Logger.log('Cliente sin membresia asignada.');
+  let horasTotal = Number(cliente.horasTotales || 0);
+  if (horasTotal <= 0) {
+    horasTotal = extraerHorasDesdeMembresiaId_(membresiaId);
+  }
+
+  if (horasTotal <= 0) {
     return null;
   }
 
-  const data = sheet.getDataRange().getValues();
-  Logger.log('Buscando membresia: [' + queryRaw + ']');
-  
-  for (let i = 1; i < data.length; i++) {
-    const row = data[i];
-    const rowId = String(row[0] || '').trim();
-    const rowNombre = String(row[1] || '').trim();
-    Logger.log('Comparando con fila ' + (i+1) + ': [' + rowId + '] / [' + rowNombre + ']');
-    
-    if (valuesMatch_(queryRaw, rowId) || valuesMatch_(queryRaw, rowNombre)) {
-      const activo = String(row[3] || '').trim().toUpperCase();
-      Logger.log('Membresia encontrada, activo: [' + activo + ']');
-      
-      // Ser más tolerante: SI, Si, si, S, s, YES, 1, true, vacío = activo
-      if (activo && activo !== 'SI' && activo !== 'S' && activo !== 'YES' && activo !== '1' && activo !== 'TRUE') {
-        return null;
-      }
-      
-      return {
-        id: rowId,
-        nombre: rowNombre,
-        horasTotal: Number(row[2] || 0)
-      };
-    }
+  return {
+    id: membresiaId,
+    nombre: membresiaId,
+    horasTotal: horasTotal
+  };
+}
+
+function extraerHorasDesdeMembresiaId_(membresiaId) {
+  const text = String(membresiaId || '').replace(',', '.');
+  const match = text.match(/\d+(?:\.\d+)?/);
+  if (!match) {
+    return 0;
   }
-  Logger.log('Membresia no encontrada en ninguna fila');
-  return null;
+  const hours = Number(match[0]);
+  return isFinite(hours) ? hours : 0;
+}
+
+function esEstadoCliente_(value) {
+  const normalized = String(value || '').trim().toUpperCase();
+  return normalized === 'SI' || normalized === 'NO' || normalized === 'S' || normalized === 'N' || normalized === 'TRUE' || normalized === 'FALSE';
 }
 
 function normalizeCompareValue_(value) {
