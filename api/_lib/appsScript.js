@@ -1,4 +1,4 @@
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycby-PCubor6R6gmUIwImjHwvYXasVEpICfutca2Ow3FbxNcqqEZ2WXCJb2Pwro2SOCJm/exec';
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwtp_CFZei0m6i3d5IFJ7NqkfF-yWAsCJwzDZj4Aql8HYiN0FAi7A5GSqdC9bgiaEJe/exec';
 
 export async function callAppsScript(payload) {
   const body = new URLSearchParams(payload);

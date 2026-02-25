@@ -533,31 +533,81 @@ function buscarMembresia_(membresiaId) {
     Logger.log('No se encuentra la hoja Membresias');
     return null;
   }
+
+  const queryRaw = String(membresiaId || '').trim();
+  if (!queryRaw) {
+    Logger.log('Cliente sin membresia asignada.');
+    return null;
+  }
+
   const data = sheet.getDataRange().getValues();
-  const membresiaIdTrimmed = String(membresiaId || '').trim();
-  
-  Logger.log('Buscando membresia: [' + membresiaIdTrimmed + ']');
+  Logger.log('Buscando membresia: [' + queryRaw + ']');
   
   for (let i = 1; i < data.length; i++) {
     const row = data[i];
     const rowId = String(row[0] || '').trim();
-    Logger.log('Comparando con fila ' + (i+1) + ': [' + rowId + ']');
+    const rowNombre = String(row[1] || '').trim();
+    Logger.log('Comparando con fila ' + (i+1) + ': [' + rowId + '] / [' + rowNombre + ']');
     
-    if (rowId === membresiaIdTrimmed) {
-      const activo = String(row[3] || 'SI').trim().toUpperCase();
-      Logger.log('Membresia encontrada, activo: ' + activo);
-      if (activo !== 'SI') {
+    if (valuesMatch_(queryRaw, rowId) || valuesMatch_(queryRaw, rowNombre)) {
+      const activo = String(row[3] || '').trim().toUpperCase();
+      Logger.log('Membresia encontrada, activo: [' + activo + ']');
+      
+      // Ser más tolerante: SI, Si, si, S, s, YES, 1, true, vacío = activo
+      if (activo && activo !== 'SI' && activo !== 'S' && activo !== 'YES' && activo !== '1' && activo !== 'TRUE') {
         return null;
       }
+      
       return {
         id: rowId,
-        nombre: String(row[1] || '').trim(),
+        nombre: rowNombre,
         horasTotal: Number(row[2] || 0)
       };
     }
   }
   Logger.log('Membresia no encontrada en ninguna fila');
   return null;
+}
+
+function normalizeCompareValue_(value) {
+  return String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toUpperCase();
+}
+
+function normalizeNumberValue_(value) {
+  const normalized = String(value || '').replace(',', '.').trim();
+  if (!normalized) {
+    return null;
+  }
+  const num = Number(normalized);
+  if (!isFinite(num)) {
+    return null;
+  }
+  return String(num);
+}
+
+function valuesMatch_(left, right) {
+  const leftNorm = normalizeCompareValue_(left);
+  const rightNorm = normalizeCompareValue_(right);
+  if (!leftNorm || !rightNorm) {
+    return false;
+  }
+
+  if (leftNorm === rightNorm) {
+    return true;
+  }
+
+  const leftNum = normalizeNumberValue_(leftNorm);
+  const rightNum = normalizeNumberValue_(rightNorm);
+  if (leftNum && rightNum && leftNum === rightNum) {
+    return true;
+  }
+
+  return false;
 }
 
 function actualizarHorasCliente_(usuario, horasExtra) {
